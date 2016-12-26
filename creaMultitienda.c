@@ -143,6 +143,7 @@ void *leefichero(void *datos)
 			}
 		}
 	}
+	pthread_exit(NULL);
 }
 
 int creaMemoria(char *tipo)

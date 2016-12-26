@@ -63,6 +63,7 @@ typedef struct{
 	int cantidad;
 	float precio;
 } producto;
+
 //Typedef añadidos de creaMultitienda.c
 typedef struct{
 	char nombre[TAM_STR];

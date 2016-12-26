@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
 					break;
 				}
 				if((shmid=shmget(clave,TAM_MAX*sizeof(producto),0))!=-1){
-					if((seg=shmat(shmid,NULL,0))==(producto *)-1){
+					if((seg=shmat(shmid,NULL,0))!=(producto *)-1){
 						sem_wait(sem_uso);
 						seg[p%10].cantidad=seg[p%10].cantidad+cantidad;
 						sem_post(sem_uso);

@@ -51,21 +51,21 @@ int main()
 	sem_t *fruta, *pescado, *carne, *bebida;
 	//Hilos
 	pthread_attr_t attr;
-   	pthread_t thid[NUM_TIPO_PROD];
+	pthread_t thid[NUM_TIPO_PROD];
 
-   	pthread_attr_init(&attr);
-   	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
 	//Apertura de semáforos
-    carne=sem_open("carne",O_CREAT,0600,1);
-    pescado=sem_open("pescado",O_CREAT,0600,1);
-    fruta=sem_open("fruta",O_CREAT,0600,1);
-    bebida=sem_open("bebida",O_CREAT,0600,1);
+	carne  =sem_open("carne",O_CREAT,0600,1);
+	pescado=sem_open("pescado",O_CREAT,0600,1);
+	fruta  =sem_open("fruta",O_CREAT,0600,1);
+	bebida =sem_open("bebida",O_CREAT,0600,1);
     //sem_uso=sem_open("",O_CREAT,0600,1);
-    sem_close(carne);
-    sem_close(pescado);
-    sem_close(fruta);
-    sem_close(bebida);
+	sem_close(carne);
+	sem_close(pescado);
+	sem_close(fruta);
+	sem_close(bebida);
 
 	for (i=0; i<NUM_TIPO_PROD; i++)
 	{
@@ -73,17 +73,17 @@ int main()
 		switch(i)
 		{
 			case CARNE-1:
-				strcpy(tipo,"carnes.txt");
-				break;
+			strcpy(tipo,"carnes.txt");
+			break;
 			case PESCADO-1:
-				strcpy(tipo,"pescados.txt");
-				break;
+			strcpy(tipo,"pescados.txt");
+			break;
 			case FRUTA-1:
-				strcpy(tipo,"frutas.txt");
-				break;
+			strcpy(tipo,"frutas.txt");
+			break;
 			case BEBIDAS-1:
-				strcpy(tipo,"bebidas.txt");
-				break;
+			strcpy(tipo,"bebidas.txt");
+			break;
 		} 
 
 		if ((dfich=fopen(tipo, "r"))==NULL)
@@ -99,10 +99,10 @@ int main()
 
 	for (i = 0; i < NUM_TIPO_PROD; i++)
 	{
-  		if (hilos[i].dfich!=NULL) 
+		if (hilos[i].dfich!=NULL) 
 		{
-	   		pthread_join(thid[i], NULL);
-	   		fclose(hilos[i].dfich);
+			pthread_join(thid[i], NULL);
+			fclose(hilos[i].dfich);
 		}
 	}
 
@@ -122,12 +122,12 @@ void *leefichero(void *datos)
 	PRODUCTO *seg = NULL;
 	//Mapeado de la dirección de memoria
 	if (hilo->idmc != -1)
-    {
-    	if((seg=shmat(hilo->idmc,NULL,0))== (PRODUCTO *)-1) 
+	{
+		if((seg=shmat(hilo->idmc,NULL,0))== (PRODUCTO *)-1) 
 			printf("Error al mapear el segmento\n"); 
-      	else 
-      	{
-	  		while(feof(hilo->dfich)==0)
+		else 
+		{
+			while(feof(hilo->dfich)==0)
 			{
 				//Lee una línea del fichero
 				fgets(linea,TAM_LECTURA,hilo->dfich);
@@ -140,29 +140,29 @@ void *leefichero(void *datos)
 				i++; 
 			}
 			fprintf(stdout,"Nombre: %s Cantidad: %d Precio: %f\n",seg[1].nombre,seg[1].cantidad,seg[1].precio);
-      	}
-    }
+		}
+	}
 }
 
 int creaMemoria(char *tipo)
 {
 	//Clave memoria compartida
- 	key_t clave;
+	key_t clave;
  	//Identificador memoria compartida 
-  	int idmc;
+	int idmc;
 
   	/* Generación de la clave con ftok*/
-  	clave=ftok(tipo,'R');
+	clave=ftok(tipo,'R');
 
   	/* Creación de la memoria compartida MIRAR EL SIZEOF*/
-  	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),IPC_CREAT|IPC_EXCL|0660))==-1) 
-    { 
-    	printf("Productos ya existentes en memoria\n"); 
-    	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),0))==-1) 
+	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),IPC_CREAT|IPC_EXCL|0660))==-1) 
+	{ 
+		printf("Productos ya existentes en memoria\n"); 
+		if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),0))==-1) 
 			printf("Error al abrir la memoria de los productos\n"); 
-    } 
-  	else 
-    	printf("Memoria creada de %s creada\n",tipo); 
+	} 
+	else 
+		printf("Memoria creada de %s creada\n",tipo); 
 
 	return idmc;
 }

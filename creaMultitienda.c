@@ -96,6 +96,7 @@ int main()
 			pthread_create(&thid[i], &attr, leefichero, &hilos[i]);
 		}
 	}
+	pthread_attr_destroy(&attr);    
 	//Bucle para cerrar los ficheros de lectura y espera a que termine el hilo
 	for (i = 0; i < NUM_TIPO_PROD; i++)
 	{

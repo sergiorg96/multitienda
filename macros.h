@@ -1,6 +1,23 @@
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <string.h>
+#include <ctype.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <pthread.h>
 
 #define TAM_MAX 5
 #define TAM_STR 15
+//Defines añadidos
+#define NUM_TIPO_PROD 4
+#define TAM_LECTURA 100
+#define TAM_TIPO 20
+#define TAM_MC 5
+//Hasta aquí
 //CARNES
 #define CARNE 1
 #define POLLO 1
@@ -35,6 +52,9 @@
 
 int tipo(char * type);
 int comprueba(int tipo, char *name);
+//Funciones de creaMultitienda.c
+void *leefichero(void *datos);
+int creaMemoria(char *tipo);
 #endif
 
 typedef struct{
@@ -43,3 +63,14 @@ typedef struct{
 	int cantidad;
 	float precio;
 } producto;
+//Typedef añadidos de creaMultitienda.c
+typedef struct{
+	char nombre[TAM_STR];
+	int cantidad;
+	float precio;
+} PRODUCTO;
+
+typedef struct{
+	FILE *dfich;
+	int idmc;	
+}HILO;

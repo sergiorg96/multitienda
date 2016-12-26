@@ -44,8 +44,7 @@ int main()
 	int i;
 	//Tipo de producto
 	char tipo[TAM_TIPO];
-	//Tabla con los id de las memorias
-	//int idsmc[NUM_TIPO_PROD];
+	//Tabla con la estructura de las memorias(ficheros de apertura e id de las memorias)
 	HILO hilos[NUM_TIPO_PROD];
 	//Semáforos de las distintas zonas de memoria
 	sem_t *fruta, *pescado, *carne, *bebida;
@@ -53,20 +52,20 @@ int main()
 	pthread_attr_t attr;
 	pthread_t thid[NUM_TIPO_PROD];
 
+	//Iniciamos el atributo del hilo como no independiente
 	pthread_attr_init(&attr);
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-
 	//Apertura de semáforos
 	carne  =sem_open("carne",O_CREAT,0600,1);
 	pescado=sem_open("pescado",O_CREAT,0600,1);
 	fruta  =sem_open("fruta",O_CREAT,0600,1);
 	bebida =sem_open("bebida",O_CREAT,0600,1);
-    //sem_uso=sem_open("",O_CREAT,0600,1);
+    //Cerramos semáforos ya que no lo usa este código
 	sem_close(carne);
 	sem_close(pescado);
 	sem_close(fruta);
 	sem_close(bebida);
-
+	//Bucle para lectura de ficheros y creación de memoria compartida	
 	for (i=0; i<NUM_TIPO_PROD; i++)
 	{
 		//Elige el tipo de alimento para abrir su fichero
@@ -85,7 +84,7 @@ int main()
 			strcpy(tipo,"bebidas.txt");
 			break;
 		} 
-
+		//Apertura del fichero de lectura
 		if ((dfich=fopen(tipo, "r"))==NULL)
 		{
 			fprintf(stderr, "No ha podido abrirse el fichero %s \n",tipo);
@@ -93,10 +92,11 @@ int main()
 			//Creamos la memoria compartida de cada uno de los tipos
 			hilos[i].idmc=creaMemoria(tipo);
 			hilos[i].dfich=dfich;
+			//Creamos el hilo correspondiente a cada memoria
 			pthread_create(&thid[i], &attr, leefichero, &hilos[i]);
 		}
 	}
-
+	//Bucle para cerrar los ficheros de lectura y espera a que termine el hilo
 	for (i = 0; i < NUM_TIPO_PROD; i++)
 	{
 		if (hilos[i].dfich!=NULL) 
@@ -127,6 +127,7 @@ void *leefichero(void *datos)
 			printf("Error al mapear el segmento\n"); 
 		else 
 		{
+			//Leemos hasta que termine el fichero
 			while(feof(hilo->dfich)==0)
 			{
 				//Lee una línea del fichero
@@ -139,7 +140,6 @@ void *leefichero(void *datos)
 				seg[i].precio = precio;
 				i++; 
 			}
-			fprintf(stdout,"Nombre: %s Cantidad: %d Precio: %f\n",seg[1].nombre,seg[1].cantidad,seg[1].precio);
 		}
 	}
 }
@@ -154,7 +154,7 @@ int creaMemoria(char *tipo)
   	/* Generación de la clave con ftok*/
 	clave=ftok(tipo,'R');
 
-  	/* Creación de la memoria compartida MIRAR EL SIZEOF*/
+  	/* Creación de la memoria compartida*/
 	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),IPC_CREAT|IPC_EXCL|0660))==-1) 
 	{ 
 		printf("Productos ya existentes en memoria\n"); 

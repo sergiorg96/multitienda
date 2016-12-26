@@ -4,6 +4,11 @@
 #include <sys/shm.h>
 #include <string.h>
 #include <ctype.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <pthread.h>
 //#include <macros.h>
 
 #define NUM_TIPO_PROD 4
@@ -21,9 +26,14 @@ typedef struct{
 	char nombre[TAM_STR];
 	int cantidad;
 	float precio;
-} producto;
+} PRODUCTO;
 
-void leefichero(FILE *dfich, int idmc);
+typedef struct{
+	FILE *dfich;
+	int idmc;	
+}HILO;
+
+void *leefichero(void *datos);
 
 int creaMemoria(char *tipo);
 
@@ -34,44 +44,74 @@ int main()
 	int i;
 	//Tipo de producto
 	char tipo[TAM_TIPO];
-	int idsmc[NUM_TIPO_PROD];
+	//Tabla con los id de las memorias
+	//int idsmc[NUM_TIPO_PROD];
+	HILO hilos[NUM_TIPO_PROD];
+	//Semáforos de las distintas zonas de memoria
+	sem_t *fruta, *pescado, *carne, *bebida;
+	//Hilos
+	pthread_attr_t attr;
+   	pthread_t thid[NUM_TIPO_PROD];
 
-	for (i=1; i<=NUM_TIPO_PROD; i++)
+   	pthread_attr_init(&attr);
+   	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+	//Apertura de semáforos
+    carne=sem_open("carne",O_CREAT,0600,1);
+    pescado=sem_open("pescado",O_CREAT,0600,1);
+    fruta=sem_open("fruta",O_CREAT,0600,1);
+    bebida=sem_open("bebida",O_CREAT,0600,1);
+    //sem_uso=sem_open("",O_CREAT,0600,1);
+    sem_close(carne);
+    sem_close(pescado);
+    sem_close(fruta);
+    sem_close(bebida);
+
+	for (i=0; i<NUM_TIPO_PROD; i++)
 	{
 		//Elige el tipo de alimento para abrir su fichero
 		switch(i)
 		{
-			case CARNE:
+			case CARNE-1:
 				strcpy(tipo,"carnes.txt");
 				break;
-			case PESCADO:
+			case PESCADO-1:
 				strcpy(tipo,"pescados.txt");
 				break;
-			case FRUTA:
+			case FRUTA-1:
 				strcpy(tipo,"frutas.txt");
 				break;
-			case BEBIDAS:
+			case BEBIDAS-1:
 				strcpy(tipo,"bebidas.txt");
 				break;
 		} 
-
-		//Creamos la memoria compartida de cada uno de los tipos
-		idsmc[i-1]=creaMemoria(tipo);
 
 		if ((dfich=fopen(tipo, "r"))==NULL)
 		{
 			fprintf(stderr, "No ha podido abrirse el fichero %s \n",tipo);
 		} else {
-			leefichero(dfich, idsmc[i-1]);
-			fclose(dfich);
+			//Creamos la memoria compartida de cada uno de los tipos
+			hilos[i].idmc=creaMemoria(tipo);
+			hilos[i].dfich=dfich;
+			pthread_create(&thid[i], &attr, leefichero, &hilos[i]);
+		}
+	}
+
+	for (i = 0; i < NUM_TIPO_PROD; i++)
+	{
+  		if (hilos[i].dfich!=NULL) 
+		{
+	   		pthread_join(thid[i], NULL);
+	   		fclose(hilos[i].dfich);
 		}
 	}
 
 	return 0;
 }
 
-void leefichero(FILE *dfich, int idmc)
+void *leefichero(void *datos)
 {
+	HILO *hilo=(HILO *)datos;
 	char nombre[TAM_STR];
 	int cantidad;
 	int i=0;
@@ -79,18 +119,18 @@ void leefichero(FILE *dfich, int idmc)
 	//Linea de lectura del fichero
 	char linea[TAM_LECTURA];
 	//Puntero para el mapeado de direcciones
-	producto *seg = NULL;
+	PRODUCTO *seg = NULL;
 	//Mapeado de la dirección de memoria
-	if (idmc != -1)
+	if (hilo->idmc != -1)
     {
-    	if((seg=shmat(idmc,NULL,0))== (producto *)-1) 
+    	if((seg=shmat(hilo->idmc,NULL,0))== (PRODUCTO *)-1) 
 			printf("Error al mapear el segmento\n"); 
       	else 
       	{
-	  		while(feof(dfich)==0)
+	  		while(feof(hilo->dfich)==0)
 			{
 				//Lee una línea del fichero
-				fgets(linea,TAM_LECTURA,dfich);
+				fgets(linea,TAM_LECTURA,hilo->dfich);
 				//Divide los parámetros de la línea
 				sscanf(linea, "%s %d %f\n",nombre, &cantidad, &precio);
 				//Los introduce en la memoria compartida
@@ -115,10 +155,10 @@ int creaMemoria(char *tipo)
   	clave=ftok(tipo,'R');
 
   	/* Creación de la memoria compartida MIRAR EL SIZEOF*/
-  	if((idmc=shmget(clave,TAM_MC*sizeof(producto),IPC_CREAT|IPC_EXCL|0660))==-1) 
+  	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),IPC_CREAT|IPC_EXCL|0660))==-1) 
     { 
     	printf("Productos ya existentes en memoria\n"); 
-    	if((idmc=shmget(clave,TAM_MC*sizeof(producto),0))==-1) 
+    	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),0))==-1) 
 			printf("Error al abrir la memoria de los productos\n"); 
     } 
   	else 

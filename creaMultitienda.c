@@ -164,7 +164,7 @@ int creaMemoria(char *tipo)
 			printf("Error al abrir la memoria de los productos\n"); 
 	} 
 	else 
-		printf("Memoria creada de %s creada\n",tipo); 
+		printf("Memoria creada a partir de %s\n",tipo); 
 
 	return idmc;
 }

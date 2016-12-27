@@ -1,41 +1,4 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <string.h>
-#include <ctype.h>
-#include <semaphore.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-//#include <macros.h>
-
-#define NUM_TIPO_PROD 4
-#define TAM_LECTURA 100
-#define TAM_TIPO 20
-#define TAM_MC 5
-
-#define CARNE 1
-#define PESCADO 2
-#define FRUTA 3
-#define BEBIDAS 4
-#define TAM_STR 15
-
-typedef struct{
-	char nombre[TAM_STR];
-	int cantidad;
-	float precio;
-} PRODUCTO;
-
-typedef struct{
-	FILE *dfich;
-	int idmc;	
-}HILO;
-
-void *leefichero(void *datos);
-
-int creaMemoria(char *tipo);
+#include "macros.h"
 
 int main()
 {

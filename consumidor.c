@@ -10,8 +10,8 @@ int main(int argc, char * argv[]){
     int posicion=0;
     key_t clave;
     int memoria_ID;
-    producto *seg=NULL;
-    producto *lista=NULL;
+    PRODUCTO *seg=NULL;
+    PRODUCTO *lista=NULL;
     //Semaforos
     sem_t *sem_uso=NULL;
     sem_t *carne=sem_open("carne",0);
@@ -130,8 +130,8 @@ int main(int argc, char * argv[]){
                 }
 
                 if(codigo!=VOLVER){
-                    if((shmid=shmget(clave,TAM_MAX*sizeof(producto),0))!=-1){
-                        if((seg=shmat(shmid,NULL,0))!=(producto *)-1){
+                    if((shmid=shmget(clave,TAM_MAX*sizeof(PRODUCTO),0))!=-1){
+                        if((seg=shmat(shmid,NULL,0))!=(PRODUCTO *)-1){
                             sem_wait(sem_uso);
 
                             if(seg[codigo%10].cantidad!=0){//Comprobamos que hay cantidad

@@ -3,21 +3,6 @@
 #include <stdio.h>
 #include "macros.h"
 
-int tipo(char * type){
-
-	int t=0;
-
-	if(!strcmp(type,"carne"))
-		t=CARNE;
-	else if(!strcmp(type,"pescado"))
-		t=PESCADO;
-	else if(!strcmp(type,"fruta"))
-		t=FRUTA;
-	else if(!strcmp(type,"bebida"))
-		t=BEBIDAS;
-	return t;
-}
-
 int comprueba(int tipo, char * name){
 	int producto=0;
 	if(strcmp(name,"eXIT")){

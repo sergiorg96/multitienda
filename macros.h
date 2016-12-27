@@ -50,7 +50,6 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
-int tipo(char * type);
 int comprueba(int tipo, char *name);
 //Funciones de creaMultitienda.c
 void *leefichero(void *datos);
@@ -59,7 +58,6 @@ int creaMemoria(char *tipo);
 
 typedef struct{
 	char nombre[TAM_STR];
-	char tipo[TAM_STR];
 	int cantidad;
 	float precio;
 } producto;

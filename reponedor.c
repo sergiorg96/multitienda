@@ -1,12 +1,5 @@
-#include <stdio.h> 
-#include <sys/shm.h> 
-#include <string.h> 
-#include <ctype.h> 
-#include <semaphore.h>
 #include "macros.h"
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
+
 
 int main(){
 

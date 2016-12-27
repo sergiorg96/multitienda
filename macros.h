@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <dirent.h>
+#include <sys/wait.h>
 
 #define TAM_MAX 5
 #define TAM_STR 15

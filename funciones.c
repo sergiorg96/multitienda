@@ -6,60 +6,60 @@ int comprueba(int tipo, char * name){
 		switch(tipo){
 			case CARNE:
 
-			if(!strcmp(name,"pollo"))
+			if(!strncmp(name,"pollo",3))
 				producto=POLLO;
-			else if(!strcmp(name,"lomo"))
+			else if(!strncmp(name,"lomo",3))
 				producto=LOMO;
-			else if(!strcmp(name,"ternera"))
+			else if(!strncmp(name,"ternera",3))
 				producto=TERNERA;
-			else if(!strcmp(name,"hamburguesa"))
+			else if(!strncmp(name,"hamburguesa",3))
 				producto=HAMBURGUESA;
-			else if(!strcmp(name,"carne picada"))
+			else if(!strncmp(name,"carne picada",3))
 				producto=CARNE_PICADA;
 
 			break;
 
 			case PESCADO:
 
-			if(!strcmp(name,"acedias"))
+			if(!strncmp(name,"acedias",3))
 				producto=ACEDIAS;
-			else if(!strcmp(name,"cazon"))
+			else if(!strncmp(name,"cazon",3))
 				producto=CAZON;
-			else if(!strcmp(name,"chocos"))
+			else if(!strncmp(name,"chocos",3))
 				producto=CHOCO;
-			else if(!strcmp(name,"lenguado"))
+			else if(!strncmp(name,"lenguado",3))
 				producto=LENGUADO;
-			else if(!strcmp(name,"sardinas"))
+			else if(!strncmp(name,"sardinas",3))
 				producto=SARDINA;
 
 			break;
 
 			case FRUTA:
 
-			if(!strcmp(name,"platanos"))
+			if(!strncmp(name,"platanos",3))
 				producto=PLATANO;
-			else if(!strcmp(name,"manzanas"))
+			else if(!strncmp(name,"manzanas",3))
 				producto=MANZANA;
-			else if(!strcmp(name,"uvas"))
+			else if(!strncmp(name,"uvas",3))
 				producto=UVA;
-			else if(!strcmp(name,"peras"))
+			else if(!strncmp(name,"peras",3))
 				producto=PERA;
-			else if(!strcmp(name,"sandias"))
+			else if(!strncmp(name,"sandias",3))
 				producto=SANDIA;
 
 			break;
 
 			case BEBIDAS:
 
-			if(!strcmp(name,"coca-cola"))
+			if(!strncmp(name,"coca-cola",3))
 				producto=COCA_COLA;
-			else if(!strcmp(name,"fanta"))
+			else if(!strncmp(name,"fanta",3))
 				producto=FANTA;
-			else if(!strcmp(name,"agua"))
+			else if(!strncmp(name,"agua",3))
 				producto=AGUA;
-			else if(!strcmp(name,"zumo"))
+			else if(!strncmp(name,"zumo",3))
 				producto=ZUMO;
-			else if(!strcmp(name,"ron"))
+			else if(!strncmp(name,"ron",3))
 				producto=RON;
 
 			break;

@@ -20,8 +20,6 @@
 #define TAM_LECTURA 100
 
 #define TAM_FCHESCR 40
-#define SI 1
-#define NO 0
 
 typedef struct{
   char nombre[TAM_STR];

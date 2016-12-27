@@ -83,7 +83,8 @@ int main()
 			case BEBIDAS-1:
 			strcpy(tipo,"bebidas.txt");
 			break;
-		} 
+		}
+		hilos[i].dfich=NULL; 
 		//Apertura del fichero de lectura
 		if ((dfich=fopen(tipo, "r"))==NULL)
 		{

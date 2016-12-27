@@ -1,11 +1,8 @@
-#include <ctype.h>
-#include <string.h>
-#include <stdio.h>
 #include "macros.h"
 
 int comprueba(int tipo, char * name){
 	int producto=0;
-	if(strcmp(name,"eXIT")){
+	if(strcmp(name,"eXIT")||strcmp(name,"exit")){
 		switch(tipo){
 			case CARNE:
 

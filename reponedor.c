@@ -7,7 +7,7 @@ int main(){
 	sem_t * fruta, * pescado, * carne, * bebida, * sem_uso;
 	char nombre[TAM_STR];
 	int p, cantidad=0, i=0, shmid;
-	producto * seg=NULL;
+	PRODUCTO * seg=NULL;
 	carne=sem_open("carne",0);
 	pescado=sem_open("pescado",0);
 	fruta=sem_open("fruta",0);
@@ -47,8 +47,8 @@ int main(){
 					sem_uso=bebida;
 					break;
 				}
-				if((shmid=shmget(clave,TAM_MAX*sizeof(producto),0))!=-1){
-					if((seg=shmat(shmid,NULL,0))!=(producto *)-1){
+				if((shmid=shmget(clave,TAM_MAX*sizeof(PRODUCTO),0))!=-1){
+					if((seg=shmat(shmid,NULL,0))!=(PRODUCTO *)-1){
 						sem_wait(sem_uso);
 						seg[p%10].cantidad=seg[p%10].cantidad+cantidad;
 						sleep(3);

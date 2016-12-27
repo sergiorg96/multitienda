@@ -1,14 +1,3 @@
-#include <stdio.h> 
-#include <sys/types.h> 
-#include <sys/ipc.h> 
-#include <sys/shm.h> 
-#include <string.h> 
-#include <ctype.h> 
-#include <semaphore.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
 #include "macros.h"
 
 #define VOLVER  0

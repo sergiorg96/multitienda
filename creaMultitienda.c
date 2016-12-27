@@ -125,7 +125,7 @@ void *leefichero(void *datos)
 	if (hilo->idmc != -1)
 	{
 		if((seg=shmat(hilo->idmc,NULL,0))== (PRODUCTO *)-1) 
-			printf("Error al mapear el segmento\n"); 
+			printf("Error al mapear el segmento.\n"); 
 		else 
 		{
 			//Leemos hasta que termine el fichero
@@ -141,6 +141,7 @@ void *leefichero(void *datos)
 				seg[i].precio = precio;
 				i++; 
 			}
+			shmdt(seg);
 		}
 	}
 	pthread_exit(NULL);
@@ -159,9 +160,9 @@ int creaMemoria(char *tipo)
   	/* Creación de la memoria compartida*/
 	if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),IPC_CREAT|IPC_EXCL|0660))==-1) 
 	{ 
-		printf("Productos ya existentes en memoria\n"); 
+		printf("Productos ya existentes en memoria.\n"); 
 		if((idmc=shmget(clave,TAM_MC*sizeof(PRODUCTO),0))==-1) 
-			printf("Error al abrir la memoria de los productos\n"); 
+			printf("Error al abrir la memoria de los productos.\n"); 
 	} 
 	else 
 		printf("Memoria creada a partir de %s\n",tipo); 

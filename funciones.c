@@ -2,7 +2,7 @@
 
 int comprueba(int tipo, char * name){
 	int producto=0;
-	if(strcmp(name,"eXIT")||strcmp(name,"exit")){
+	if(strcmp(name,"eXIT")&&strcmp(name,"exit")){
 		switch(tipo){
 			case CARNE:
 

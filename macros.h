@@ -11,6 +11,9 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <dirent.h>
+#include <time.h>
+#include <sys/msg.h> 
+#include <sys/wait.h>
 
 #define TAM_MAX 5
 #define TAM_STR 15
@@ -50,16 +53,6 @@
 #define ZUMO 34
 #define RON 35
 
-#ifndef FUNCIONES_H
-#define FUNCIONES_H
-
-int comprueba(int tipo, char *name);
-//Funciones de creaMultitienda.c y eliminaMultitienda.c
-void *leefichero(void *datos);
-void *escribefichero(void *datos);
-int creaMemoria(char *tipo);
-#endif
-
 //Typedef añadidos de creaMultitienda.c
 typedef struct{
 	char nombre[TAM_STR];
@@ -71,3 +64,19 @@ typedef struct{
 	FILE *dfich;
 	int idmc;	
 }HILO;
+struct mymsgbuf{ 
+   long mtype; 
+   PRODUCTO articulo;
+}; 
+
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
+
+int comprueba(int tipo, char *name);
+//Funciones de creaMultitienda.c y eliminaMultitienda.c
+void *leefichero(void *datos);
+void *escribefichero(void *datos);
+int creaMemoria(char *tipo);
+void escr_msg(int qid,struct mymsgbuf *qbuf);
+void imprimir_msg(int qid,long type,struct mymsgbuf *qbuf);
+#endif

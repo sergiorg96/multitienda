@@ -27,6 +27,7 @@ int main(){
 	int codigo; //Se usa para escoger tipo de producto,producto,volver y salir
 	int elementos=0;//Numero de elementos que hemos tomado
 	int precio_total=0;//Precio total de todos los productos
+	int posicion; //Posicion dentro de la memoria compartida
 	//Memoria compartida
 	key_t clave;
 	int memoria_ID;
@@ -145,28 +146,29 @@ int main(){
 
 					while(((codigo<31)||(codigo>35))&&(codigo!=0)){
 						printf("Codigo incorrecto. Introduzca un codigo correcto:");
-						scanf("%d",&codigo);
+							scanf("%d",&codigo);
+						}
+
+						clave=ftok("bebida",'S');
+						sem_uso=bebida;
+
+						break;
 					}
-
-					clave=ftok("bebida",'S');
-					sem_uso=bebida;
-
-					break;
-				}
-				if(codigo!=VOLVER){ 
-					if((memoria_ID=shmget(clave,TAM_MAX*sizeof(PRODUCTO),0))!=-1){//Obtenemos zona de memoria
-						if((seg=shmat(memoria_ID,NULL,0))!=(PRODUCTO *)-1){ //La mapeamos para poder usarla
-							sem_wait(sem_uso); //Bajamos semaforo
-                            if(seg[codigo%10].cantidad!=0){//Comprobamos que hay cantidad
-                            	clave_cola=ftok("carrito",'M'); //Obtenemos clave cola
-                            	if((cola_ID=msgget(clave_cola,IPC_CREAT|0660))==-1)
-                            		printf("Error al iniciar coger el carrito\n");
-                            	else{
-                            		lista.mtype=tipo;// Va a ser tipo 1 siempre
-                            		lista.articulo=seg[codigo%10];
-                            		escr_msg(cola_ID,&lista);
-                                    seg[codigo%10].cantidad--;//Decrementamos cantidad del producto
-                                    precio_total+=seg[codigo%10].precio;
+					if(codigo!=VOLVER){ 
+						if((memoria_ID=shmget(clave,TAM_MAX*sizeof(PRODUCTO),0))!=-1){//Obtenemos zona de memoria
+							if((seg=shmat(memoria_ID,NULL,0))!=(PRODUCTO *)-1){ //La mapeamos para poder usarla
+								sem_wait(sem_uso); //Bajamos semaforo
+								posicion=(codigo%10)-1;
+				    if(seg[posicion].cantidad!=0){//Comprobamos que hay cantidad
+					clave_cola=ftok("carrito",'M'); //Obtenemos clave cola
+					if((cola_ID=msgget(clave_cola,IPC_CREAT|0660))==-1)
+						printf("Error al iniciar coger el carrito\n");
+					else{
+						lista.mtype=tipo;// Va a ser tipo 1 siempre
+						lista.articulo=seg[posicion];
+						escr_msg(cola_ID,&lista);
+					    seg[posicion].cantidad--;//Decrementamos cantidad del producto
+					    precio_total+=seg[posicion].precio;
                                     elementos++; 
                                 }
                             }

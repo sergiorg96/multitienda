@@ -6,7 +6,7 @@ int main(){
 	key_t clave;
 	sem_t * fruta, * pescado, * carne, * bebida, * sem_uso;
 	char nombre[TAM_STR];
-	char lista[TAM_STR][10];
+	char lista[10][TAM_STR];
 	int repuestos[10];
 	int p=0, cantidad=0, i=0, j,shmid;
 	PRODUCTO * seg=NULL;
@@ -23,7 +23,7 @@ int main(){
 		else{
 			for(j=0;p!=-1&&j<10;j++){
 				printf("¿Qué desea reponer? Introduzca \"EXIT\" si desea salir. \n");
-				scanf("%s", nombre);
+				scanf("%[^\n]", nombre);
 				while(getchar()!='\n');
 				nombre[0]=tolower(nombre[0]); 
 
@@ -34,6 +34,7 @@ int main(){
 				if(p>0){
 					printf("¿Qué cantidad de %s desea reponer?\n", nombre);
 					scanf("%d",&cantidad);
+					while(getchar()!='\n');
 					strcpy(lista[j],nombre);
 					repuestos[j]=cantidad;
 					switch(p/10+1){

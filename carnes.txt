@@ -1,0 +1,5 @@
+Pollo 1 4.5
+Lomo 2 3.2
+Ternera 3 2.3
+Hamburguesa 4 2.5 
+Carne_picada 5 3.1

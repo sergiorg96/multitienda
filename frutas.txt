@@ -1,0 +1,5 @@
+Platano 1 4.5
+Manzana 2 3.2
+Uva 3 2.3
+Pera 4 2.5 
+Sandía 5 3.1

@@ -8,7 +8,7 @@ int main(){
 	char nombre[TAM_STR];
 	char lista[10][TAM_STR ];
 	int repuestos[10];
-	int p=0, cantidad=0, i=0, j,shmid;
+	int p=0, cantidad=0, i=0, j,shmid, introducidos;
 	PRODUCTO * seg=NULL;
 	carne=sem_open("carne",0);
 	pescado=sem_open("pescado",0);
@@ -32,10 +32,16 @@ int main(){
 				}
 
 				if(p>0){
-					printf("¿Qué cantidad de %s desea reponer?\n", nombre);
-					scanf("%d",&cantidad);
-					while(getchar()!='\n');
+					do{
+						printf("¿Qué cantidad de %s desea reponer?\n", nombre);
+						scanf("%d",&cantidad);
+						while(getchar()!='\n');
+						if(cantidad<0)
+							printf("Introduzca un número mayor o igual a 0.\n\n");
+					}while(cantidad<0);
+
 					strcpy(lista[j],nombre);
+					lista[j][0]=toupper(lista[j][0]);
 					repuestos[j]=cantidad;
 					switch(p/10+1){
 						case 1:
@@ -57,12 +63,16 @@ int main(){
 					}
 					if((shmid=shmget(clave,TAM_MAX*sizeof(PRODUCTO),0))!=-1){
 						if((seg=shmat(shmid,NULL,0))!=(PRODUCTO *)-1){
-							sem_wait(sem_uso);
-							seg[(p%10)-1].cantidad=seg[(p%10)-1].cantidad+cantidad;
-							sleep(3);
-							sem_post(sem_uso);
-							printf("\t------Producto repuesto correctamente------\n\n");
+							for(introducidos=1;introducidos<=cantidad;introducidos++){
+								sem_wait(sem_uso);
+								seg[(p%10)-1].cantidad++;
+								sleep(1);
+								sem_post(sem_uso);
+								printf("\t------Producto numero %d repuesto correctamente------\n", introducidos);
+							}
 							shmdt(seg);
+							system("clear");
+							printf("%s introducido correctamente.\n\n",lista[j]);
 						}
 						else
 							printf("ERROR: No se ha podido mapear la zona de memoria.\n");
@@ -77,9 +87,11 @@ int main(){
 				}
 			}
 			printf("\t\t------¡HASTA PRONTO!------\n\n");
-			printf("LISTA DE PRODUCTOS REPUESTOS:\n");
+			printf("\tLISTA DE PRODUCTOS REPUESTOS:\n");
+			printf("\t---------------------------\n");
 			for(i=0;i<j;i++)
-				printf("%s...%d\n", lista[i], repuestos[i]);
+				printf("\t|%-12s\t\t%2d|\n", lista[i], repuestos[i]);
+			printf("\t---------------------------\n");
 			sem_close(carne);
 			sem_close(pescado);
 			sem_close(fruta);

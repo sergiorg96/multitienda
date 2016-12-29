@@ -6,7 +6,7 @@ int main(){
 	key_t clave;
 	sem_t * fruta, * pescado, * carne, * bebida, * sem_uso;
 	char nombre[TAM_STR];
-	char lista[10][TAM_STR];
+	char lista[10][TAM_STR ];
 	int repuestos[10];
 	int p=0, cantidad=0, i=0, j,shmid;
 	PRODUCTO * seg=NULL;

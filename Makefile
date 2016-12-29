@@ -3,7 +3,7 @@ todo: funciones.c reponedor.c creaMultitienda.c consumidor.c eliminaMultitienda.
 	gcc -W -Wall -o crea creaMultitienda.c -lpthread
 	gcc -W -Wall -o consumidor consumidor.c -lpthread
 	gcc -W -Wall -o elimina eliminaMultitienda.c -lpthread
-	
+
 reponedor:	funciones.c reponedor.c creaMultitienda.c consumidor.c eliminaMultitienda.c
 	gcc -W -Wall -o reponedor reponedor.c funciones.c -lpthread
 
@@ -16,3 +16,5 @@ consumidor: consumidor.c
 elimina: eliminaMultitienda.c
 	gcc -W -Wall -o elimina eliminaMultitienda.c -lpthread
 
+borra:
+	rm crea elimina reponedor consumidor

@@ -219,7 +219,7 @@ int main(){
                 		printf("|*************************************|\n|\t\t\t\t      |\n|\t\t\t\t      |\n");
                 		printf("|ATENDIO: JESUS                       |\n");
                 		printf("|CLIENTE: PUBLICO GENERAL             |\n|\t\t\t\t      |\n");
-                		printf("|FECHA:%02d/%02d/%04d        HORA:%02d:%02d:%02d|\n",fecha->tm_mday, fecha->tm_mon, 
+                		printf("|FECHA:%02d/%02d/%04d        HORA:%02d:%02d:%02d|\n",fecha->tm_mday, fecha->tm_mon+1, 
                 			fecha->tm_year+1900,fecha->tm_hour, 
                 			fecha->tm_min, fecha->tm_sec);
                 		printf("|*************************************|\n");
@@ -227,9 +227,9 @@ int main(){
                 		printf("|*************************************|\n");
                 		imprimir_msg(cola_ID,tipo,&lista);
                 		printf("|=====================================|\n");
-                		printf("|\tSUBTOTAL.....$    %6.2f       |\n",precio_total);
-                		printf("|\tIVA..........$    %6.2f       |\n",(precio_total*0.1));
-                		printf("|\tTOTAL........$    %6.2f       |\n",precio_total+(precio_total*0.1));
+                		printf("|\tSUBTOTAL.....$   %6.2f       |\n",precio_total);
+                		printf("|\tIVA..........$   %6.2f       |\n",(precio_total*0.1));
+                		printf("|\tTOTAL........$   %6.2f       |\n",precio_total+(precio_total*0.1));
                 		printf(" ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯\n");
                 	}
 

@@ -22,7 +22,7 @@ int main(){
 	//Colas
 	key_t clave_cola;
 	int cola_ID;
-	long tipo=1;
+	long tipo;
 	struct mymsgbuf lista;
 	//Variables
 	int codigo; //Se usa para escoger tipo de producto,producto,volver y salir
@@ -39,6 +39,8 @@ int main(){
 	sem_t *pescado=sem_open("pescado",0);
 	sem_t *fruta=sem_open("fruta",0);
 	sem_t *bebida=sem_open("bebida",0);
+	
+	tipo=getpid();
 
     //Limpiamos pantalla
     if(fruta!=NULL||carne!=NULL||pescado!=NULL||bebida!=NULL){
